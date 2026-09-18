@@ -6,7 +6,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Staff's Dashboard Route Mony
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
+Route::get('/staff/dashboard', function () {
+    return view('Staff.dashboard');
+})->name('staff.dashboard');
+
+
