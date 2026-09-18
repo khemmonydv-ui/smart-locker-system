@@ -12,4 +12,8 @@ Route::get('/staff/dashboard', function () {
     return view('Staff.dashboard');
 })->name('staff.dashboard');
 
+// Users Dashboard Route Bora
+Route:: get ('/users/dashboard', function() {
+    return view('Users.dashboard');
+})->name('users.dashboard');
 
