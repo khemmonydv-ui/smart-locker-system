@@ -26,6 +26,7 @@
     --radius-md: 12px;
     --radius-lg: 16px;
 
+
     --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.04);
 }
 
@@ -34,8 +35,7 @@
 ========================= */
 
 * {
-    margin: 0;
-    padding: 0;
+    
     box-sizing: border-box;
 }
 
@@ -107,7 +107,7 @@ a {
     gap: 12px;
     padding: 0 12px;
     margin-bottom: 40px;
-    
+
 }
 
 .brand-icon {
@@ -266,7 +266,7 @@ a {
     display: flex;
     align-items: center;
 }
- 
+
 /* Dark overlay behind the sidebar when it's open on phone/tablet. */
 .sidebar-overlay {
     position: fixed;
@@ -274,11 +274,11 @@ a {
     z-index: 90;
     background: rgba(15, 23, 42, 0.45);
 }
- 
+
 .sidebar-overlay[hidden] {
     display: none;
 }
- 
+
 
 
 .page-heading h1 {
@@ -880,4 +880,8 @@ a {
     .chart-column .bar {
         width: 25px;
     }
+}
+@theme {
+  --color-brand: #6441f0;
+  --color-crimson: #b3365c;
 }
