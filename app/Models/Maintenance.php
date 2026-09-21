@@ -11,7 +11,7 @@ class Maintenance extends Model
         return $this->belongTo(Locker::class);
     }
     public function user(){
-        return $this->belongTo(Usr::class);
+        return $this->belongTo(User::class);
     }
     //
 }
