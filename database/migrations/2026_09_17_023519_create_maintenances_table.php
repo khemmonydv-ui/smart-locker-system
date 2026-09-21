@@ -22,7 +22,7 @@ return new class extends Migration
           ->constrained('lockers')
           ->cascadeOnDelete();
 
-        $table->date('assigned_at');
+        $table->date('assigned_at')->nullable;
         $table->text('problem');
         $table->string('status')->default('pending');
 

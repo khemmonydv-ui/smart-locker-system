@@ -116,7 +116,9 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    border-radius: 50%;
+    border: 1px solid var(--white);
+    background: var(--background);
     color: var(--white);
     font-size: 20px;
 }
