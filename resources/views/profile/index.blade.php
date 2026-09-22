@@ -6,9 +6,18 @@
 <title>Profile</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-start justify-center py-10 px-4">
+<div class="bg-white border w-screen text-xl border-gray-200 rounded-lg pt-4 mb-6 flex">
+     <a href="{{ url()->previous() }}" class="inline-flex items-center gap-4 px-3 pt-1 text-gray-600 hover:text-gray-900 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 19-7-7 7-7"/>
+          <path d="M19 12H5"/>
+        </svg>
 
-  <div class="w-full max-w-[1000px] space-y-6">
+      </a>
+      Profile
+</div>
+<body class="bg-gray-50 min-h-screen  flex flex-col  justify-center  ">
+  <div class="w-full  max-w-[1000px] mx-auto  space-y-6">
 
     <!-- Header card -->
     <div class="bg-white border w-[1000px] border-gray-200 rounded-lg p-8 flex flex-col items-center text-center">
