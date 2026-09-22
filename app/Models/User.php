@@ -27,4 +27,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function lockerUsages(){
+        return $this->hasMany(LockerUsage::class);
+    }
+
+    public function maintenance(){
+        return $this->hasMany(Maintenance::class);
+    }
 }

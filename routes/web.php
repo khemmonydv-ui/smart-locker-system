@@ -62,11 +62,3 @@ Route::group(['prefix'=>'user','as' => 'users.'], function(){
     Route::post('/logout', [AuthContrller::class, 'logout'])->name('logout');
 
 });
-
-// Staff Login
-Route::group(['prefix'=> 'staff','as'=>'staffs.'], function(){
-    // staff login
-    Route::get('/register', [StaffContrller::class, 'showRegister'])->name('register');
-    // Staff login store
-    Route::post('/register', [StaffContrller::class, 'register']);
-});
