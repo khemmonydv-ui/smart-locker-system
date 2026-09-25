@@ -1,4 +1,4 @@
-<x-app-layout>
+
     <div class="min-h-screen bg-white" x-data="{ selected: null }">
 
         {{-- Header --}}
@@ -73,4 +73,3 @@
 
         </div>
     </div>
-</x-app-layout>
