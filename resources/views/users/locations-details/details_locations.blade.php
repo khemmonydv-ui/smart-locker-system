@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-50">
 
-<div class="bg-white w-full mx-5 min-h-screen">
+<div class="bg-white w-full max-w-2xl mx-5 min-h-screen">
 
     <x-page-header :title="$location->name" :back="route('locations.index')" />
 
