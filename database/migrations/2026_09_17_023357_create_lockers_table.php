@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('lockers', function (Blueprint $table) {
             $table->id();
             $table->String('name');
-            $table->ForeignId('user_id')->constrained()->onDelete('cascade');
+            $table->ForeignId('location_id')->constrained()->onDelete('');
             $table->string('status')->default('available');
             $table->string('size')->default('medium');
             $table->timestamps();
