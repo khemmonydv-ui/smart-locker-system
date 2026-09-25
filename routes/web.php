@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\LockerDetail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,5 +22,5 @@ Route:: get ('/users/dashboard', function() {
 
 //locker detail pech
 Route::group(['prefix'=>'/lockerdetail','as'=>'lockerdetail.'], function(){
-    Route::get
+     Route::get('/', [LockerDetail::class, 'index'])->name('index');
 });
