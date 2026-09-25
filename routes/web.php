@@ -31,10 +31,31 @@ Route::prefix('admin')->group(function () {
 =======
 Route::get('/maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
 
+<<<<<<< HEAD
 Route::post('/maintenance', [MaintenanceController::class, 'store'])->name('maintenance.store');
 
 Route::patch('/maintenance/{id}/resolve', [MaintenanceController::class, 'resolve'])->name('maintenance.resolve');
 >>>>>>> 46af316 (that just static)
+=======
+Route::get('/staff/dashboard', function () {
+    return view('Staff.dashboard');  
+})->name('staff.dashboard');
+
+Route::get('/staff/user', function () {
+    return view('/Staff.user');
+})->name('staff.user');
+
+Route::get('staff/locker-usage', function () {
+    return view('/staff.locker-usage');
+})->name('locker-usage');
+
+
+
+// Users Dashboard Route Bora
+Route:: get ('/users/dashboard', function() {
+    return view('Users.dashboard');
+})->name('users.dashboard');
+>>>>>>> e97a97b (just only static)
 
 // User pages: choose a locker, create PIN, unlock, release
 Route::prefix('lockerdetail')->group(function () {

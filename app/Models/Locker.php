@@ -19,10 +19,15 @@ class Locker extends Model
         return $this->belongsTo(Location::class);
     }
 
+<<<<<<< HEAD
     // One locker has many usage records
     public function lockerUsages(): HasMany
     {
         return $this->hasMany(LockerUsage::class);
+=======
+    public function lockerUsage(){
+        return $this->hasMany(LockerUage::class);
+>>>>>>> e97a97b (just only static)
     }
 
     // One locker has many maintenance records
