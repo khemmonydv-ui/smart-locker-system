@@ -2,63 +2,17 @@
 
 use App\Http\Controllers\AuthContrller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocationController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 
+Route::get('/staff/dashboard', function () {
+    return view('staff.dashboard');
+})->name('staff.dashboard');
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Route::get('/login', function () {
-    return view('login.index');
-})->name('login');
-
-
-// route user dalin
-Route::group(['prefix'=>'user','as' => 'users.'], function(){
-    // Login page
-    Route::get('/login', [AuthContrller::class, 'showLogin'])->name('login');
-    // Login store
-    Route::post('/login', [AuthContrller::class, 'login']);
-    // Logout
-    Route::post('/logout', [AuthContrller::class, 'logout'])->name('logout');
-
-});
+Route::get('/locations', [LocationController::class, 'index'])->name('locations.index');
