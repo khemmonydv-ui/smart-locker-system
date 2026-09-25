@@ -1,6 +1,15 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lockerdetail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    
     <div class="min-h-screen bg-white" x-data="{ selected: null }">
-
+    
         {{-- Header --}}
         <div class="flex items-center gap-4 px-6 py-5 border-b border-gray-200">
             <a href="{{ url()->previous() }}" class="text-gray-500 hover:text-gray-700">
@@ -12,9 +21,9 @@
                 Lockers &mdash; {{ $facility ?? 'Facility' }}
             </h1>
         </div>
-
+    
         <div class="px-6 py-6 max-w-5xl mx-auto">
-
+    
             {{-- Legend --}}
             <div class="flex items-center gap-6 mb-4">
                 <div class="flex items-center gap-2">
@@ -30,7 +39,7 @@
                     <span class="text-sm text-amber-600">Maintenance</span>
                 </div>
             </div>
-
+    
             {{-- Locker grid --}}
             <div class="border border-gray-200 rounded-2xl p-6 shadow-sm">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -38,7 +47,7 @@
                             @php
                                 $status = $locker['status'];
                                 $isAvailable = $status === 'available';
-
+    
                                 $classes = match ($status) {
                                     'available'   => 'bg-green-600 hover:bg-green-700 cursor-pointer',
                                     'in_use'      => 'bg-red-400 cursor-not-allowed opacity-95',
@@ -46,7 +55,7 @@
                                     default       => 'bg-gray-300 cursor-not-allowed',
                                 };
                                 @endphp
-
+    
                         <button
                             type="button"
                             @if ($isAvailable)
@@ -65,11 +74,13 @@
                     @endforeach
                 </div>
             </div>
-
+    
             <p class="text-center text-sm text-gray-400 mt-4">
                 <span x-show="!selected">Tap a green locker to select it</span>
                 <span x-show="selected" x-cloak>Selected locker: <span class="font-semibold text-gray-600" x-text="selected"></span></span>
             </p>
-
+    
         </div>
     </div>
+</body>
+</html>
