@@ -9,7 +9,7 @@
 </head>
 <body class="bg-gray-50">
 
-<div class="mx-auto ml-20 mr-20 bg-white w-full ...">
+<div class="mx-auto ml-20 mr-20 bg-white min-h-screen ...">
 
     {{-- Header --}}
     <div class="flex items-center gap-4 px-4 py-4 border-b border-gray-100">
