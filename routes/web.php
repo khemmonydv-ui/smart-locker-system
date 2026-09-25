@@ -17,3 +17,7 @@ Route:: get ('/users/dashboard', function() {
     return view('Users.dashboard');
 })->name('users.dashboard');
 
+//locker detail pech
+Route::group(['prefix'=>'/lockerdetail','as'=>'lockerdetail.'], function(){
+    Route::get
+});
