@@ -13,6 +13,9 @@ Route::get('/staff/dashboard', function () {
     return view('staff.dashboard');
 })->name('staff.dashboard');
 
+Route::get('/users/dashboard', function () {
+    return view('users.dashboard');
+})->name('users.dashboard');
 
 
 Route::get('/users/locations', [LocationController::class, 'index'])->name('locations.index');
