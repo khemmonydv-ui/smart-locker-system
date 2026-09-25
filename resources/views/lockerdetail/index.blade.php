@@ -34,18 +34,18 @@
             {{-- Locker grid --}}
             <div class="border border-gray-200 rounded-2xl p-6 shadow-sm">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    @foreach ($lockers as $locker)
-                        @php
-                            $status = $locker['status'];
-                            $isAvailable = $status === 'available';
+                        @foreach ($lockers as $locker)
+                            @php
+                                $status = $locker['status'];
+                                $isAvailable = $status === 'available';
 
-                            $classes = match ($status) {
-                                'available'   => 'bg-green-600 hover:bg-green-700 cursor-pointer',
-                                'in_use'      => 'bg-red-400 cursor-not-allowed opacity-95',
-                                'maintenance' => 'bg-amber-500 cursor-not-allowed opacity-95',
-                                default       => 'bg-gray-300 cursor-not-allowed',
-                            };
-                        @endphp
+                                $classes = match ($status) {
+                                    'available'   => 'bg-green-600 hover:bg-green-700 cursor-pointer',
+                                    'in_use'      => 'bg-red-400 cursor-not-allowed opacity-95',
+                                    'maintenance' => 'bg-amber-500 cursor-not-allowed opacity-95',
+                                    default       => 'bg-gray-300 cursor-not-allowed',
+                                };
+                                @endphp
 
                         <button
                             type="button"
