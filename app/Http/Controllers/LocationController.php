@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Location;
+use App\Models\Locker;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -30,6 +31,21 @@ class LocationController extends Controller
             'locations' => $locations,
             'search' => $search,
             'filter' => $filter,
+        ]);
+    }
+
+    public function show(Location $location): View
+    {
+        $counts = Locker::where('location_id', $location->id)
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        return view('locations.details_locations', [
+            'location' => $location,
+            'available' => $counts->get('available', 0),
+            'inUse' => $counts->get('in_use', 0),
+            'maintenance' => $counts->get('maintenance', 0),
         ]);
     }
 }

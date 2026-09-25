@@ -3,22 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Locker extends Model
 {
+    protected $fillable = [
+        'name',
+        'status',
+        'size',
+        'user_id',
+        'location_id',
+    ];
 
-    public function location(){
-        return $this->BelongTo(Location::class);
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 
-    public function lockerUage(){
-        return $this->hasMany(LockerUage::class);
+    public function usages()
+    {
+        return $this->hasMany(LockerUsage::class);
     }
-
-    public function maintenance(){
-        return $this->hasMany(Maintenance::class);
-    }
-    //
 }

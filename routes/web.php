@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthContrller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LockerUsageController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,3 +20,6 @@ Route::get('/users/dashboard', function () {
 
 
 Route::get('/users/locations', [LocationController::class, 'index'])->name('locations.index');
+Route::get('/locations/{location}', [LocationController::class, 'show'])->name('locations.details_locations');
+Route::resource('locations', LocationController::class);
+Route::get('/locations/{location}', [LocationController::class, 'show']);
