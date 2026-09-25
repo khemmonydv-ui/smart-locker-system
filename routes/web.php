@@ -19,4 +19,4 @@ Route:: get ('/users/dashboard', function() {
 })->name('users.dashboard');
 
 
-Route::get('/locations', [LocationController::class, 'index'])->name('locations.index');
+Route::get('/users/locations', [LocationController::class, 'index'])->name('locations.index');
