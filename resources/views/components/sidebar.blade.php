@@ -12,7 +12,7 @@
 
     <nav class="sidebar-nav">
 
-        <a href="{{ url('/dashboard') }}"
+        <a href="{{ url('staff/dashboard') }}"
            class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"
            @if(request()->is('dashboard')) aria-current="page" @endif>
             <i class="fa-solid fa-chart-line"></i>
@@ -26,14 +26,14 @@
             <span>Locations</span>
         </a>
 
-        <a href="{{ url('/lockers') }}"
+        <a href="{{ url('tatt/locker') }}"
            class="nav-item {{ request()->is('lockers*') ? 'active' : '' }}"
            @if(request()->is('lockers*')) aria-current="page" @endif>
             <i class="fa-solid fa-boxes-stacked"></i>
             <span>Lockers</span>
         </a>
 
-        <a href="{{ url('/users') }}"
+        <a href="{{ url('staff/user') }}"
            class="nav-item {{ request()->is('users*') ? 'active' : '' }}"
            @if(request()->is('users*')) aria-current="page" @endif>
             <i class="fa-solid fa-users"></i>

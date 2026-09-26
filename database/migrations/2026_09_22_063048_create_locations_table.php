@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lockers', function (Blueprint $table) {
+        Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->String('name');
-            $table->ForeignId('location_id')->constrained()->onDelete('cascade');
-            $table->string('status')->default('available');
-            $table->string('size')->default('medium');
             $table->timestamps();
         });
     }
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lockers');
+        Schema::dropIfExists('locations');
     }
 };

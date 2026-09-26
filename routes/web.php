@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthContrller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LockerUsageController;
 
 Route::get('/', function () {
