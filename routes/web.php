@@ -9,28 +9,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/login', function () {
+    return view('login.index');
+})->name('login');
+
+// route user dalin
+Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
+    // Login page
+    Route::get('/login', [AuthContrller::class, 'showLogin'])->name('login');
+    // Login store
+    Route::post('/login', [AuthContrller::class, 'login']);
+    // Logout
+    Route::post('/logout', [AuthContrller::class, 'logout'])->name('logout');
+});
+
+Route::get('/staff/locker-usage', [LockerUsageController::class, 'index'])->name('staff.locker-usage');
 
 Route::get('/staff/dashboard', function () {
-    return view('Staff.dashboard');  
+    return view('Staff.dashboard');
 })->name('staff.dashboard');
-
-Route::get('/staff/user', function () {
-    return view('/Staff.user');
-})->name('staff.user');
-
-Route::get('staff/locker-usage', function () {
-    return view('/staff.locker-usage');
-})->name('locker-usage');
-
-
-
-// Users Dashboard Route Bora
-Route:: get ('/users/dashboard', function() {
-    return view('Users.dashboard');
-})->name('users.dashboard');
-
-
-Route::get('/users/locations', [LocationController::class, 'index'])->name('locations.index');
-Route::get('/locations/{location}', [LocationController::class, 'show'])->name('locations.details_locations');
-Route::resource('locations', LocationController::class);
-Route::get('/locations/{location}', [LocationController::class, 'show']);
