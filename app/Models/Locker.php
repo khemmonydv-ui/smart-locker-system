@@ -19,8 +19,7 @@ class Locker extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public function usages()
-    {
-        return $this->hasMany(LockerUsage::class);
+    public function lockerUsage(){
+        return $this->hasMany(LockerUage::class);
     }
 }
