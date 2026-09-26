@@ -3,19 +3,18 @@
 use App\Http\Controllers\AuthContrller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\LockerUsageController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
 
 Route::get('/maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
 
 Route::post('/maintenance', [MaintenanceController::class, 'store'])->name('maintenance.store');
 
 Route::patch('/maintenance/{id}/resolve', [MaintenanceController::class, 'resolve'])->name('maintenance.resolve');
-
-
-
-
 
 Route::get('/settings', function () {
     return view('staff.settings', [
@@ -45,53 +44,37 @@ Route::post('/settings/password', function () {
     return back()->with('success', 'Password changed. (not actually persisted yet)');
 })->name('settings.password');
 
+// Mony With Route
+
+Route::get('locker-usage', [LockerUsageController::class, 'index'])->name('locker-usage');
+
+Route::get('user', function () {
+    return view('staff.user');
+})->name('staff.user');
 
 
+Route::prefix('staff')->name('staff.')->group(function () {
 
+    // user
+    Route::get('/user', function () {
+        return view('staff.user');
+    })->name('staff.user');
 
+    // lockerusage
+    Route::get('/locker-usage', [LockerUsageController::class, 'index'])
+        ->name('locker-usage');
 
+    // miantenance
+    Route::get('/maintenanace', [MaintenanceController::class, 'index'])
+        ->name('maintenance.index');
 
+    Route::get('/miantenance', [MaintenanceController::class, 'store'])
+        ->name('maintenance.store');
+        
+    Route::get('/maintenace/{id}/resolve', [MaintenanceController::class, 'resolve'])
+        ->name('maintenance.resolve');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Route::get('/login', function () {
-    return view('login.index');
-})->name('login');
-
-// route user dalin
-Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
-    // Login page
-    Route::get('/login', [AuthContrller::class, 'showLogin'])->name('login');
-    // Login store
-    Route::post('/login', [AuthContrller::class, 'login']);
-    // Logout
-    Route::post('/logout', [AuthContrller::class, 'logout'])->name('logout');
+    // setting
+    
+    
 });
-
-
-});
-
-
