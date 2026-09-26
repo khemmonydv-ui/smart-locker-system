@@ -26,14 +26,14 @@
             <span>Locations</span>
         </a>
 
-        <a href="{{ url('tatt/locker') }}"
+        <a href="{{ url('/locker') }}"
            class="nav-item {{ request()->is('lockers*') ? 'active' : '' }}"
            @if(request()->is('lockers*')) aria-current="page" @endif>
             <i class="fa-solid fa-boxes-stacked"></i>
             <span>Lockers</span>
         </a>
 
-        <a href="{{ url('staff/user') }}"
+        <a href="{{ url('/user') }}"
            class="nav-item {{ request()->is('users*') ? 'active' : '' }}"
            @if(request()->is('users*')) aria-current="page" @endif>
             <i class="fa-solid fa-users"></i>

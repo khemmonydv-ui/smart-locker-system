@@ -91,7 +91,6 @@ Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
     Route::post('/logout', [AuthContrller::class, 'logout'])->name('logout');
 });
 
-Route::get('/staff/locker-usage', [LockerUsageController::class, 'index'])->name('staff.locker-usage');
 
 });
 
