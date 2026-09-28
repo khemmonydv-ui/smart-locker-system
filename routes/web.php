@@ -9,10 +9,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Staff's Dashboard Route Mony
+
 Route::get('/staff/dashboard', function () {
-    return view('staff.dashboard');
+    return view('Staff.dashboard');
 })->name('staff.dashboard');
 
+
+
+
+//bora //
 Route::get('/users/dashboard', function () {
     return view('users.dashboard');
 })->name('users.dashboard');
