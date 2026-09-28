@@ -40,4 +40,7 @@ Route::group(['prefix' => '/lockerdetail', 'as' => 'lockerdetail.'], function ()
             ],
         ]);
     })->name('index');
+    Route::get('/yourlocker', function(){
+       
+    });
 }); 
