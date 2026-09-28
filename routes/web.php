@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthContrller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\LockerUsageController;
+use App\Http\Controllers\UserController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -48,17 +50,10 @@ Route::post('/settings/password', function () {
 
 Route::get('locker-usage', [LockerUsageController::class, 'index'])->name('locker-usage');
 
-Route::get('user', function () {
-    return view('staff.user');
-})->name('staff.user');
 
 
 Route::prefix('staff')->name('staff.')->group(function () {
 
-    // user
-    Route::get('/user', function () {
-        return view('staff.user');
-    })->name('staff.user');
 
     // lockerusage
     Route::get('/locker-usage', [LockerUsageController::class, 'index'])
@@ -78,3 +73,16 @@ Route::prefix('staff')->name('staff.')->group(function () {
     
     
 });
+
+
+// User list
+Route::get('/staff/user', [UserController::class, 'index'])->name('staff.user.index');
+
+// Add a user
+Route::post('/staff/user', [UserController::class, 'store'])->name('staff.user.store');
+
+// View one user
+Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+
+// Change Active / Inactive
+Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');

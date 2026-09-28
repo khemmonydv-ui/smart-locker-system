@@ -2,31 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\LockerUsage;
+use Illuminate\Support\Str;
 
 class LockerUsageController extends Controller
 {
     public function index()
     {
-        // static demo data — swap this out once locker usage tracking is wired up
-        $activeSessions = collect([
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-        ]);
+        $activeSessions = LockerUsage::with(['user', 'locker'])
+            ->where('status', 'active')
+            ->latest('started_at')
+            ->get()
+            ->map(fn ($usage) => $this->toRow($usage));
 
-        $completedSessions = collect([
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'completed'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'completed'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'completed'],
-        ]);
+        $completedSessions = LockerUsage::with(['user', 'locker'])
+            ->where('status', 'completed')
+            ->latest('ended_at')
+            ->take(50)
+            ->get()
+            ->map(fn ($usage) => $this->toRow($usage));
 
         return view('staff.locker-usage', [
-            'activeSessions' => $activeSessions,
+            'activeSessions'    => $activeSessions,
             'completedSessions' => $completedSessions,
-            'title' => 'Locker Usage',
+            'title'             => 'Locker Usage',
         ]);
+    }
+
+    // Turn one database row into the fields the table component expects
+    private function toRow(LockerUsage $usage): object
+    {
+        $user = $usage->user;
+
+        // active sessions are still running, so measure up to now
+        $end     = $usage->ended_at ?? now();
+        $minutes = $usage->started_at ? (int) abs($usage->started_at->diffInMinutes($end)) : 0;
+
+        return (object) [
+            'locker'     => $usage->locker?->name ?? ('#' . $usage->locker_id),
+            'user'       => $user?->name ?: Str::before($user?->email ?? '-', '@'),
+            'location'   => $usage->locker?->location?->name ?? '-',
+            'start_time' => $usage->started_at?->format('h:i A') ?? '-',
+            'duration'   => sprintf('%02d:%02d', intdiv($minutes, 60), $minutes % 60),
+            'status'     => $usage->status,
+        ];
     }
 }

@@ -1,32 +1,50 @@
 @props([
     'users',
-    'searchPlaceholder' => 'Search by name, email, phone, locker, status...',
+    'searchPlaceholder' => 'Search by name, email, locker, status...',
 ])
 
 @php
-    // unique id so multiple instances of this component on one page never collide
     $tableId = 'userTable_' . uniqid();
+    $statusStyles = [
+        'active'   => 'bg-emerald-50 text-emerald-600',
+        'inactive' => 'bg-gray-100 text-gray-500',
+        'blocked'  => 'bg-rose-50 text-rose-600',
+    ];
 @endphp
 
-<div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5" data-user-table>
+<div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5"
+     data-user-table
+     data-has-errors="{{ $errors->any() ? '1' : '0' }}">
 
-    {{-- search --}}
-    <div class="flex items-center w-full max-w-2xl mb-5">
-        <div class="relative w-full">
+    {{-- success message --}}
+    @if (session('success'))
+        <div class="mb-4 px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 text-sm">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- search + add button --}}
+    <div class="flex items-center justify-between gap-3 mb-5">
+        <div class="relative w-full max-w-2xl">
             <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M21 21l-4.35-4.35m1.35-5.15a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
             </svg>
-            <input
-                type="text"
-                data-user-search
-                placeholder="{{ $searchPlaceholder }}"
-                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-700
-                       placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400
-                       transition"
-            >
+            <input type="text" data-user-search placeholder="{{ $searchPlaceholder }}"
+                   class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-700
+                          placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30
+                          focus:border-indigo-400 transition">
         </div>
+
+        <button type="button" data-open-add
+                class="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600
+                       text-white text-sm font-medium hover:bg-indigo-700 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add User
+        </button>
     </div>
 
     {{-- table --}}
@@ -36,7 +54,6 @@
                 <tr class="bg-gray-50 text-gray-500 text-xs font-medium border-b border-gray-200">
                     <th class="text-left px-5 py-3">User</th>
                     <th class="text-left px-5 py-3">Email</th>
-                    <th class="text-left px-5 py-3">Phone</th>
                     <th class="text-left px-5 py-3">Sessions</th>
                     <th class="text-left px-5 py-3">Active Locker</th>
                     <th class="text-left px-5 py-3">Status</th>
@@ -45,57 +62,73 @@
             </thead>
             <tbody data-user-body class="divide-y divide-gray-100">
                 @forelse ($users as $user)
+                    @php
+                        $status   = strtolower($user->status ?? 'active');
+                        $style    = $statusStyles[$status] ?? 'bg-gray-100 text-gray-500';
+                        $color    = '#' . substr(md5($user->name), 0, 6);
+                        $sessions = $user->sessions ?? 0;
+                        $locker   = $user->active_locker ?? '-';
+                    @endphp
                     <tr class="user-row hover:bg-gray-50/70 transition-colors">
                         <td class="px-5 py-3.5">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-                                     style="background-color: {{ '#'.substr(md5($user->name), 0, 6) }}">
+                                     style="background-color: {{ $color }}">
                                     {{ strtoupper(substr($user->name, 0, 1)) }}
                                 </div>
                                 <span class="text-gray-800 font-medium">{{ $user->name }}</span>
                             </div>
                         </td>
                         <td class="px-5 py-3.5 text-gray-600">{{ $user->email }}</td>
-                        <td class="px-5 py-3.5 text-gray-600">{{ $user->phone }}</td>
-                        <td class="px-5 py-3.5 text-gray-600">{{ $user->sessions }}</td>
-                        <td class="px-5 py-3.5 text-gray-600">{{ $user->active_locker }}</td>
+                        <td class="px-5 py-3.5 text-gray-600">{{ $sessions }}</td>
+                        <td class="px-5 py-3.5 text-gray-600">{{ $locker }}</td>
                         <td class="px-5 py-3.5">
-                            @php
-                                $statusStyles = [
-                                    'active'   => 'bg-emerald-50 text-emerald-600',
-                                    'inactive' => 'bg-gray-100 text-gray-500',
-                                    'blocked'  => 'bg-rose-50 text-rose-600',
-                                ];
-                                $style = $statusStyles[strtolower($user->status)] ?? 'bg-gray-100 text-gray-500';
-                            @endphp
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $style }}">
-                                {{ ucfirst($user->status) }}
+                                {{ ucfirst($status) }}
                             </span>
                         </td>
                         <td class="px-5 py-3.5">
                             <div class="flex items-center justify-end gap-3">
-                                <a href="{{ \Illuminate\Support\Facades\Route::has('users.show') ? route('users.show', $user->id) : '#' }}"
-                                   class="text-indigo-500 hover:text-indigo-700 transition" title="View">
+
+                                {{-- eye: open details pop-up --}}
+                                <button type="button" data-view-user
+                                        data-name="{{ $user->name }}"
+                                        data-email="{{ $user->email }}"
+                                        data-joined="{{ $user->created_at?->format('d M Y') }}"
+                                        data-sessions="{{ $sessions }}"
+                                        data-locker="{{ $locker }}"
+                                        data-status="{{ ucfirst($status) }}"
+                                        data-status-style="{{ $style }}"
+                                        data-color="{{ $color }}"
+                                        class="text-indigo-500 hover:text-indigo-700 transition" title="View">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-                                </a>
-                                <a href="{{ \Illuminate\Support\Facades\Route::has('users.edit') ? route('users.edit', $user->id) : '#' }}"
-                                   class="text-rose-500 hover:text-rose-700 transition" title="Manage user">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                                    </svg>
-                                </a>
+                                </button>
+
+                                {{-- user button: toggle active / inactive --}}
+                                <form method="POST" action="{{ route('users.toggle-status', $user) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit"
+                                            class="{{ $status === 'active' ? 'text-rose-500 hover:text-rose-700' : 'text-emerald-500 hover:text-emerald-700' }} transition"
+                                            title="{{ $status === 'active' ? 'Set inactive' : 'Set active' }}">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                        </svg>
+                                    </button>
+                                </form>
+
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="px-5 py-10 text-center text-gray-400">No users yet.</td>
+                        <td colspan="6" class="px-5 py-10 text-center text-gray-400">No users yet.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -106,31 +139,184 @@
         </p>
     </div>
 
+    {{-- ===== details pop-up ===== --}}
+    <div data-view-modal class="hidden fixed inset-0 z-50 items-center justify-center bg-black/40 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <h3 class="text-sm font-semibold text-gray-800">User Details</h3>
+                <button type="button" data-close-modal class="text-gray-400 hover:text-gray-600 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="px-6 py-5">
+                <div class="flex flex-col items-center mb-5">
+                    <div data-v-avatar class="w-14 h-14 rounded-full flex items-center justify-center text-xl font-semibold text-white"></div>
+                    <p data-v-name class="mt-3 text-sm font-semibold text-gray-800"></p>
+                    <span data-v-status class="mt-1 inline-flex px-3 py-0.5 rounded-full text-xs font-medium"></span>
+                </div>
+
+                <dl class="text-sm divide-y divide-gray-100">
+                    <div class="flex justify-between py-2.5">
+                        <dt class="text-gray-500">Email</dt>
+                        <dd data-v-email class="text-gray-800"></dd>
+                    </div>
+                    <div class="flex justify-between py-2.5">
+                        <dt class="text-gray-500">Joined</dt>
+                        <dd data-v-joined class="text-gray-800"></dd>
+                    </div>
+                    <div class="flex justify-between py-2.5">
+                        <dt class="text-gray-500">Total Sessions</dt>
+                        <dd data-v-sessions class="text-gray-800"></dd>
+                    </div>
+                    <div class="flex justify-between py-2.5">
+                        <dt class="text-gray-500">Active Locker</dt>
+                        <dd data-v-locker class="text-gray-800"></dd>
+                    </div>
+                </dl>
+
+                <button type="button" data-close-modal
+                        class="mt-5 w-full py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- ===== add user pop-up ===== --}}
+    <div data-add-modal class="hidden fixed inset-0 z-50 items-center justify-center bg-black/40 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <h3 class="text-sm font-semibold text-gray-800">Add User</h3>
+                <button type="button" data-close-modal class="text-gray-400 hover:text-gray-600 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form method="POST" action="{{ route('staff.user.store') }}" class="px-6 py-5 space-y-4">
+                @csrf
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Name</label>
+                    <input type="text" name="name" value="{{ old('name') }}" required
+                           class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400">
+                    @error('name') <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Email</label>
+                    <input type="email" name="email" value="{{ old('email') }}" required
+                           class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400">
+                    @error('email') <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Password</label>
+                    <input type="password" name="password" required
+                           class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400">
+                    @error('password') <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Confirm password</label>
+                    <input type="password" name="password_confirmation" required
+                           class="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400">
+                </div>
+
+                <div class="flex gap-3 pt-1">
+                    <button type="button" data-close-modal
+                            class="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 @once
     @push('scripts')
     <script>
-        // wires up every [data-user-table] instance on the page, so the
-        // component works no matter how many times it's dropped in
         document.querySelectorAll('[data-user-table]').forEach(function (wrapper) {
+
+            // ---------- search ----------
             const input = wrapper.querySelector('[data-user-search]');
             const rows = Array.from(wrapper.querySelectorAll('[data-user-body] .user-row'));
             const noResults = wrapper.querySelector('[data-no-results]');
 
-            if (!input) return;
+            if (input) {
+                input.addEventListener('input', function () {
+                    const term = this.value.trim().toLowerCase();
+                    let visibleCount = 0;
 
-            input.addEventListener('input', function () {
-                const term = this.value.trim().toLowerCase();
-                let visibleCount = 0;
+                    rows.forEach(function (row) {
+                        const matches = row.textContent.toLowerCase().includes(term);
+                        row.classList.toggle('hidden', !matches);
+                        if (matches) visibleCount++;
+                    });
 
-                rows.forEach(function (row) {
-                    const matches = row.textContent.toLowerCase().includes(term);
-                    row.classList.toggle('hidden', !matches);
-                    if (matches) visibleCount++;
+                    noResults.classList.toggle('hidden', visibleCount !== 0);
                 });
+            }
 
-                noResults.classList.toggle('hidden', visibleCount !== 0);
+            // ---------- pop-ups ----------
+            const viewModal = wrapper.querySelector('[data-view-modal]');
+            const addModal  = wrapper.querySelector('[data-add-modal]');
+
+            const show = (m) => { m.classList.remove('hidden'); m.classList.add('flex'); };
+            const hide = (m) => { m.classList.add('hidden'); m.classList.remove('flex'); };
+            const set  = (sel, value) => { viewModal.querySelector(sel).textContent = value || '-'; };
+
+            // eye button
+            wrapper.querySelectorAll('[data-view-user]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const name = btn.dataset.name || '';
+                    const avatar = viewModal.querySelector('[data-v-avatar]');
+                    avatar.textContent = name.charAt(0).toUpperCase();
+                    avatar.style.backgroundColor = btn.dataset.color;
+
+                    const badge = viewModal.querySelector('[data-v-status]');
+                    badge.className = 'mt-1 inline-flex px-3 py-0.5 rounded-full text-xs font-medium ' + btn.dataset.statusStyle;
+
+                    set('[data-v-name]', name);
+                    set('[data-v-status]', btn.dataset.status);
+                    set('[data-v-email]', btn.dataset.email);
+                    set('[data-v-joined]', btn.dataset.joined);
+                    set('[data-v-sessions]', btn.dataset.sessions);
+                    set('[data-v-locker]', btn.dataset.locker);
+
+                    show(viewModal);
+                });
+            });
+
+            // add button
+            wrapper.querySelectorAll('[data-open-add]').forEach(function (btn) {
+                btn.addEventListener('click', function () { show(addModal); });
+            });
+
+            // reopen the add form if validation failed
+            if (wrapper.dataset.hasErrors === '1') show(addModal);
+
+            // close buttons, dark area, Esc
+            [viewModal, addModal].forEach(function (modal) {
+                modal.querySelectorAll('[data-close-modal]').forEach(function (btn) {
+                    btn.addEventListener('click', function () { hide(modal); });
+                });
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) hide(modal);
+                });
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') { hide(viewModal); hide(addModal); }
             });
         });
     </script>

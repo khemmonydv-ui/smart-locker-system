@@ -33,11 +33,13 @@
             <span>Lockers</span>
         </a>
 
-        <a href="{{ url('/user') }}"
-           class="nav-item {{ request()->is('users*') ? 'active' : '' }}"
-           @if(request()->is('users*')) aria-current="page" @endif>
-            <i class="fa-solid fa-users"></i>
-            <span>Users</span>
+        <a href="{{ route('staff.user.index') }}"
+            class="nav-item {{ request()->is('staff/user*') ? 'active' : '' }}"
+            @if(request()->is('staff/user*')) aria-current="page" @endif>
+
+                <i class="fa-solid fa-users"></i>
+                <span>Users</span>
+
         </a>
 
         <a href="{{ url('/locker-usage') }}"

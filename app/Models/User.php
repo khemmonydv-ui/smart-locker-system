@@ -35,4 +35,6 @@ class User extends Authenticatable
     public function maintenance(){
         return $this->hasMany(Maintenance::class);
     }
+
+    protected $fillable = ['name', 'email', 'password', 'role', 'status'];
 }
