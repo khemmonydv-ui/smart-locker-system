@@ -5,6 +5,7 @@ use App\Http\Controllers\LocationLockerController;
 use App\Http\Controllers\LockerUsageController;
 use App\Models\Location;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,6 +21,11 @@ Route::get('/users/dashboard', function () {
     ]);
 })->name('users.dashboard');
 
+Route::get('/users/dashboard', [UserDashboardController::class, 'index'])
+    ->name('users.dashboard');
+
+
+    
 Route::prefix('users/locations')->name('locations.')->group(function () {
     Route::get('/', [LocationController::class, 'index'])->name('index');
     Route::get('/{location}', [LocationController::class, 'show'])->name('details_locations');
