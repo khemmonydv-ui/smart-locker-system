@@ -54,6 +54,7 @@
         {{-- Results --}}
         @forelse ($locations as $location)
             <x-location-card
+                :location="$location"
                 :name="$location->name"
                 :address="$location->address"
                 :distance="$location->distance_km"

@@ -1,4 +1,5 @@
 @props([
+    'location',
     'name',
     'address',
     'distance' => null,
@@ -6,7 +7,7 @@
     'isOpen' => true,
 ])
 
-<a href="#" class="block rounded-2xl border border-gray-200 px-4 py-3 mb-3 hover:border-indigo-300 hover:shadow-sm transition">
+<a href="{{ route('locations.details_locations', $location) }}" class="block rounded-2xl border border-gray-200 px-4 py-3 mb-3 hover:border-indigo-300 hover:shadow-sm transition">
     <div class="flex items-start justify-between gap-3">
         <div class="flex items-start gap-2 min-w-0">
             <svg class="w-4 h-4 mt-0.5 text-indigo-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
