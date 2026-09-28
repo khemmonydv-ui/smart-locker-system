@@ -1,6 +1,5 @@
 @props([
     'title' => 'Dashboard',
-    'subtitle' => 'Overview of your Smart Locker System',
 ])
 
 <header class="navbar">

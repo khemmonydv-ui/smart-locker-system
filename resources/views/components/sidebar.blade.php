@@ -12,7 +12,7 @@
 
     <nav class="sidebar-nav">
 
-        <a href="{{ url('/dashboard') }}"
+        <a href="{{ url('staff/dashboard') }}"
            class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"
            @if(request()->is('dashboard')) aria-current="page" @endif>
             <i class="fa-solid fa-chart-line"></i>
