@@ -1,6 +1,12 @@
-@props(['status' => 'Open', 'statusClass' => 'text-emerald-600'])
+@props([
+    'href' => '#',
+    'name' => 'Central Library',
+    'details' => '1.2 km · 24/40 available',
+    'status' => 'Open',
+    'statusClass' => 'text-emerald-600',
+])
 
-<div class="flex items-center justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3">
+<a href="{{ $href }}" class="flex items-center justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3 hover:border-indigo-300 hover:shadow-sm transition">
     <div class="flex items-center gap-3">
         <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-600">
             {{-- map-pin icon --}}
@@ -11,8 +17,8 @@
             </svg>
         </div>
         <div>
-            <p class="text-sm font-semibold text-gray-900">Central Library</p>
-            <p class="text-xs text-gray-400">1.2 km · 24/40 available</p>
+            <p class="text-sm font-semibold text-gray-900">{{ $name }}</p>
+            <p class="text-xs text-gray-400">{{ $details }}</p>
         </div>
     </div>
 
@@ -24,4 +30,4 @@
             <path d="m9 18 6-6-6-6" />
         </svg>
     </div>
-</div>
+</a>

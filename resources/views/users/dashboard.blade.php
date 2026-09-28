@@ -1,9 +1,9 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
-<div class=" font-sans">
+<div class="font-sans">
 
     <x-home-header name="Bora" />
 
-    <div class="mx-20 pb-8">
+    <div class="mx-5 md:mx-20 pb-8">
         <x-active-locker />
 
         <x-find-locker-banner />
@@ -11,12 +11,18 @@
         {{-- Nearby locations --}}
         <div class="mb-3 flex items-center justify-between">
             <h2 class="text-base font-semibold text-gray-900">Nearby Locations</h2>
-            <a href="#" class="text-sm font-medium text-indigo-600">View all</a>
+            <a href="{{ route('locations.index') }}" class="text-sm font-medium text-indigo-600">View all</a>
         </div>
         <div class="space-y-3">
-            <x-locker-card />
-            <x-locker-card />
-            <x-locker-card />
+            @foreach ($locations as $location)
+                <x-locker-card
+                    :href="route('locations.details_locations', $location)"
+                    :name="$location->name"
+                    :details="$location->distance_km . ' km · ' . $location->available_slots . ' available'"
+                    :status="$location->is_open ? 'Open' : 'Closed'"
+                    :status-class="$location->is_open ? 'text-emerald-600' : 'text-gray-400'"
+                />
+            @endforeach
         </div>
 
         {{-- Recent activity --}}
