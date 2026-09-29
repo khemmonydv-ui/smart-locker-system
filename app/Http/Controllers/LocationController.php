@@ -7,65 +7,62 @@ use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
+    // Show all locations
     public function index()
     {
-        $locations = Location::with('lockers')->get();
-        // dd($locations);
-        return view('staff.locations.index', compact('locations'));
+        $locations = Location::latest()->paginate(10);
+        return view('locations.index', compact('locations'));
     }
 
-    // Store new location
+    // Show the "add location" form
+    public function create()
+    {
+        return view('locations.create');
+    }
+
+    // Save a new location
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $data = $request->validate([
+            'name'    => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            
         ]);
 
-        Location::create([
-            'name' => $request->name,
-            'address' => $request->address,
-            
-        ]);
+        Location::create($data);
 
-        return redirect()
-            ->route('locations.index')
-            ->with('success', 'Location added successfully!');
+        return redirect()->route('locations.index')->with('success', 'Location created');
     }
 
-    // Show edit form
+    // Show one location
+    public function show(Location $location)
+    {
+        return view('locations.show', compact('location'));
+    }
+
+    // Show the "edit location" form
     public function edit(Location $location)
     {
-        return view('staff.locations.edit', compact('location'));
+        return view('locations.edit', compact('location'));
     }
 
-    // Update location
+    // Save changes to a location
     public function update(Request $request, Location $location)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $data = $request->validate([
+            'name'    => 'required|string|max:255',
             'address' => 'required|string|max:255',
         ]);
 
-        $location->update([
-            'name' => $request->name,
-            'address' => $request->address,
-        ]);
+        $location->update($data);
 
-        return redirect()
-            ->route('locations.index')
-            ->with('success', 'Location updated successfully!');
+        return redirect()->route('locations.index')->with('success', 'Location updated');
     }
 
-    // Delete location
+    // Delete a location
     public function destroy(Location $location)
     {
         $location->delete();
 
-        return redirect()
-            ->route('locations.index')
-            ->with('success', 'Location deleted successfully!');
+        return redirect()->route('locations.index')->with('success', 'Location deleted');
     }
-    
 }

@@ -2,76 +2,70 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
 use App\Models\Locker;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class LockerController extends Controller
 {
-    // Show all lockers
     public function index()
     {
-        $lockers = Locker::with('location')->get();
-        
-        return view('staff.lockers.index', compact('lockers'));
+        $lockers = Locker::with('location')->latest()->paginate(10);
+        return view('lockers.index', compact('lockers'));
     }
 
-    // Store new locker
+    public function create()
+    {
+        $locations = Location::orderBy('name')->get();
+        return view('lockers.create', compact('locations'));
+    }
+
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $data = $request->validate([
             'location_id' => 'required|exists:locations,id',
-            'status' => 'required|string',
-            'size' => 'required|string',
+            'name'        => ['required', 'string', 'max:50',
+                Rule::unique('lockers', 'name')->where('location_id', $request->location_id)],
+            'status'      => 'required|in:available,in_use,maintenance',
+            'size'        => 'required|in:small,medium,large',
         ]);
 
-        Locker::create([
-            'name' => $request->name,
-            'location_id' => $request->location_id,
-            'status' => $request->status,
-            'size' => $request->size,
-        ]);
+        Locker::create($data);
 
-        return redirect()
-            ->route('lockers.index')
-            ->with('success', 'Locker added successfully!');
+        return redirect()->route('lockers.index')->with('success', 'Locker created');
     }
 
-    // Show edit form
+    public function show(Locker $locker)
+    {
+        return redirect()->route('lockers.edit', $locker);
+    }
+
     public function edit(Locker $locker)
     {
-        return view('staff.lockers.edit', compact('locker'));
+        $locations = Location::orderBy('name')->get();
+        return view('lockers.edit', compact('locker', 'locations'));
     }
 
-    // Update locker
     public function update(Request $request, Locker $locker)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $data = $request->validate([
             'location_id' => 'required|exists:locations,id',
-            'status' => 'required|string',
-            'size' => 'required|string',
+            'name'        => ['required', 'string', 'max:50',
+                Rule::unique('lockers', 'name')->where('location_id', $request->location_id)->ignore($locker->id)],
+            'status'      => 'required|in:available,in_use,maintenance',
+            'size'        => 'required|in:small,medium,large',
         ]);
 
-        $locker->update([
-            'name' => $request->name,
-            'location_id' => $request->location_id,
-            'status' => $request->status,
-            'size' => $request->size,
-        ]);
+        $locker->update($data);
 
-        return redirect()
-            ->route('lockers.index')
-            ->with('success', 'Locker updated successfully!');
+        return redirect()->route('lockers.index')->with('success', 'Locker updated');
     }
 
-    // Delete locker
     public function destroy(Locker $locker)
     {
         $locker->delete();
 
-        return redirect()
-            ->route('lockers.index')
-            ->with('success', 'Locker deleted successfully!');
+        return redirect()->route('lockers.index')->with('success', 'Locker deleted');
     }
 }
