@@ -1,46 +1,30 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LockerDetail;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LockerController;
+use App\Http\Controllers\LockerDetailController;
+use App\Http\Controllers\YourLocker;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Staff's Dashboard Route Mony
+// Admin pages: URLs start with /admin
+Route::prefix('admin')->group(function () {
+    Route::resource('users', UserController::class);
+    Route::resource('locations', LocationController::class);
+    Route::resource('lockers', LockerController::class);
+});
 
-Route::get('/staff/dashboard', function () {
-    return view('Staff.dashboard');
-})->name('staff.dashboard');
+// User pages: choose a locker, create PIN, unlock, release
+Route::prefix('lockerdetail')->group(function () {
+    Route::get('/', [LockerDetailController::class, 'index'])->name('lockerdetail.index');
+    Route::get('/location/{location}', [LockerDetailController::class, 'location'])->name('lockerdetail.location');
 
-// Users Dashboard Route Bora
-Route:: get ('/users/dashboard', function() {
-    return view('Users.dashboard');
-})->name('users.dashboard');
-
-//locker detail pech
-Route::group(['prefix' => '/lockerdetail', 'as' => 'lockerdetail.'], function () {
-    Route::get('/', function () {
-        return view('lockerdetail.index', [
-            'facility' => 'Riverside Sports Center',
-            'lockers' => [
-                ['code' => 'A01', 'status' => 'available'],
-                ['code' => 'A02', 'status' => 'in_use'],
-                ['code' => 'A03', 'status' => 'maintenance'],
-                ['code' => 'B01', 'status' => 'available'],
-                ['code' => 'B02', 'status' => 'in_use'],
-                ['code' => 'B03', 'status' => 'maintenance'],
-                ['code' => 'C01', 'status' => 'available'],
-                ['code' => 'C02', 'status' => 'in_use'],
-                ['code' => 'C03', 'status' => 'maintenance'],
-                ['code' => 'D01', 'status' => 'available'],
-                ['code' => 'D02', 'status' => 'in_use'],
-                ['code' => 'D03', 'status' => 'maintenance'],
-            ],
-        ]);
-    })->name('index');
-    Route::get('/yourlocker', function(){
-       
-    });
-}); 
+    Route::post('/use', [YourLocker::class, 'store'])->name('locker.use');
+    Route::get('/yourlocker/{code}', [YourLocker::class, 'show'])->name('locker.show');
+    Route::post('/yourlocker/{code}/unlock', [YourLocker::class, 'unlock'])->name('locker.unlock');
+    Route::post('/yourlocker/{code}/release', [YourLocker::class, 'release'])->name('locker.release');
+});
