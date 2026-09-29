@@ -12,7 +12,7 @@
 
     <nav class="sidebar-nav">
 
-        <a href="{{ url('/dashboard') }}"
+        <a href="{{ url('staff/dashboard') }}"
            class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"
            @if(request()->is('dashboard')) aria-current="page" @endif>
             <i class="fa-solid fa-chart-line"></i>
@@ -65,7 +65,7 @@
 
     <div class="sidebar-bottom">
 
-        <form method="POST" action="">
+        <form method="POST" action="{{route('logout')}}">
             @csrf
             <button type="submit" class="logout-button">
                 <i class="fa-solid fa-right-from-bracket"></i>
