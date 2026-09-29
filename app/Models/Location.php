@@ -7,7 +7,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Location extends Model
 {   
-    public function locker(){
+    protected $table = 'locations';
+
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'name',
+        'address',
+    ];
+
+    // Relationship One locations has many lockers
+    public function lockers(){
         return $this->hasMany(Locker::class);
     }
     //
