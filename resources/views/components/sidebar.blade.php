@@ -26,7 +26,7 @@
             <span>Locations</span>
         </a>
 
-        <a href="{{ url('tatt/locker') }}"
+        <a href="{{ url('/lockers') }}"
            class="nav-item {{ request()->is('lockers*') ? 'active' : '' }}"
            @if(request()->is('lockers*')) aria-current="page" @endif>
             <i class="fa-solid fa-boxes-stacked"></i>
