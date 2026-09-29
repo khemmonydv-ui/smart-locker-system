@@ -3,7 +3,6 @@
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LocationLockerController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LockerController;
 use App\Http\Controllers\LockerUsageController;
 use Illuminate\Support\Facades\Route;
