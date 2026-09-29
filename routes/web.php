@@ -3,7 +3,6 @@
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LocationLockerController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LockerController;
 use App\Http\Controllers\LockerUsageController;
 use Illuminate\Support\Facades\Route;
@@ -73,20 +72,20 @@ Route::prefix('my-locker')->name('locker.')->group(function () {
 
 
 // Route login and register dalin
-// Show login page 
-Route::get('/login', [AuthController::class, 'showLogin']) ->name('login'); 
-// Submit login 
-Route::post('/login', [AuthController::class, 'login']) ->name('login.store'); 
-// Logout 
+// Show login page
+Route::get('/login', [AuthController::class, 'showLogin']) ->name('login');
+// Submit login
+Route::post('/login', [AuthController::class, 'login']) ->name('login.store');
+// Logout
 Route::post('/logout', [AuthController::class, 'logout']) ->name('logout');
 
-// Staff register page 
-Route::get('/register/staff', [AuthController::class, 'showStaffRegister']) ->name('register.staff'); 
+// Staff register page
+Route::get('/register/staff', [AuthController::class, 'showStaffRegister']) ->name('register.staff');
 // Store staff
-Route::post('/register/staff', [AuthController::class, 'staffRegister']) ->name('register.staff.store'); 
-// User register page 
-Route::get('/register/user', [AuthController::class, 'showUserRegister']) ->name('register.user'); 
-// Store user 
+Route::post('/register/staff', [AuthController::class, 'staffRegister']) ->name('register.staff.store');
+// User register page
+Route::get('/register/user', [AuthController::class, 'showUserRegister']) ->name('register.user');
+// Store user
 Route::post('/register/user', [AuthController::class, 'userRegister']) ->name('register.user.store');
 
 Route::get('/staff/dashboard', function () {
