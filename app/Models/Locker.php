@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Locker extends Model
 {

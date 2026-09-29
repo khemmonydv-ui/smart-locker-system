@@ -5,13 +5,21 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LockerController;
 use App\Http\Controllers\LockerUsageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LockerUsageController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 
+Route::get('/staff/dashboard', function () {
+    return view('staff.dashboard');
+})->name('staff.dashboard');
 
+Route::get('/users/dashboard', function () {
+    return view('users.dashboard');
+})->name('users.dashboard');
 
 
 
