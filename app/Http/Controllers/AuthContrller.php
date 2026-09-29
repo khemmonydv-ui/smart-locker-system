@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class AuthContrller extends Controller
+class AuthController extends Controller
 {
     public function showlogin()
     {
