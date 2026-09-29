@@ -26,14 +26,14 @@
             <span>Locations</span>
         </a>
 
-        <a href="{{ url('/lockers') }}"
+        <a href="{{ url('tatt/locker') }}"
            class="nav-item {{ request()->is('lockers*') ? 'active' : '' }}"
            @if(request()->is('lockers*')) aria-current="page" @endif>
             <i class="fa-solid fa-boxes-stacked"></i>
             <span>Lockers</span>
         </a>
 
-        <a href="{{ url('/users') }}"
+        <a href="{{ url('staff/user') }}"
            class="nav-item {{ request()->is('users*') ? 'active' : '' }}"
            @if(request()->is('users*')) aria-current="page" @endif>
             <i class="fa-solid fa-users"></i>
@@ -65,7 +65,7 @@
 
     <div class="sidebar-bottom">
 
-        <form method="POST" action="">
+        <form method="POST" action="{{route('logout')}}">
             @csrf
             <button type="submit" class="logout-button">
                 <i class="fa-solid fa-right-from-bracket"></i>

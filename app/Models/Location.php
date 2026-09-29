@@ -2,23 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable(['name', 'address'])]
 class Location extends Model
-{   
-    protected $table = 'locations';
+{
+    use HasFactory;
 
-    protected $primaryKey = 'id';
-
-    protected $fillable = [
-        'name',
-        'address',
-    ];
-
-    // Relationship One locations has many lockers
-    public function lockers(){
+    public function lockers(): HasMany
+    {
         return $this->hasMany(Locker::class);
     }
-    //
 }
