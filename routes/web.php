@@ -4,8 +4,9 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LocationLockerController;
 use App\Http\Controllers\LockerUsageController;
 use App\Models\Location;
+use App\Models\LockerUsage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,14 +19,14 @@ Route::get('/staff/dashboard', function () {
 Route::get('/users/dashboard', function () {
     return view('users.dashboard', [
         'locations' => Location::orderBy('distance_km')->take(3)->get(),
+        'activeUsage' => LockerUsage::with(['locker.location'])
+            ->where('user_id', Auth::id())
+            ->whereNull('ended_at')
+            ->latest('started_at')
+            ->first(),
     ]);
 })->name('users.dashboard');
 
-Route::get('/users/dashboard', [UserDashboardController::class, 'index'])
-    ->name('users.dashboard');
-
-
-    
 Route::prefix('users/locations')->name('locations.')->group(function () {
     Route::get('/', [LocationController::class, 'index'])->name('index');
     Route::get('/{location}', [LocationController::class, 'show'])->name('details_locations');

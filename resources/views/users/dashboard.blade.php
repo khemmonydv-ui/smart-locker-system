@@ -4,7 +4,9 @@
     <x-home-header name="Bora" />
 
     <div class="mx-5 md:mx-20 pb-8">
-        <x-active-locker />
+        @if ($activeUsage)
+            <x-active-locker :usage="$activeUsage" />
+        @endif
 
         <x-find-locker-banner />
 
