@@ -3,66 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Models\Location;
+use App\Models\Locker;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class LocationController extends Controller
 {
-    // Show all locations
-    public function index()
+    public function index(Request $request): View
     {
-        $locations = Location::latest()->paginate(10);
-        return view('locations.index', compact('locations'));
-    }
+        $search = trim((string) $request->query('search', ''));
+        $filter = $request->query('filter', 'all');
 
-    // Show the "add location" form
-    public function create()
-    {
-        return view('locations.create');
-    }
+        $locations = Location::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('address', 'like', "%{$search}%");
+                });
+            })
+            ->when($filter === 'open', function ($query) {
+                $query->where('is_open', true);
+            })
+            ->orderBy('distance_km')
+            ->get();
 
-    // Save a new location
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name'    => 'required|string|max:255',
-            'address' => 'required|string|max:255',
+        return view('locations.index', [
+            'locations' => $locations,
+            'search' => $search,
+            'filter' => $filter,
         ]);
-
-        Location::create($data);
-
-        return redirect()->route('locations.index')->with('success', 'Location created');
     }
 
-    // Show one location
-    public function show(Location $location)
+    public function show(Location $location): View
     {
-        return view('locations.show', compact('location'));
-    }
+        $counts = Locker::where('location_id', $location->id)
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
 
-    // Show the "edit location" form
-    public function edit(Location $location)
-    {
-        return view('locations.edit', compact('location'));
-    }
-
-    // Save changes to a location
-    public function update(Request $request, Location $location)
-    {
-        $data = $request->validate([
-            'name'    => 'required|string|max:255',
-            'address' => 'required|string|max:255',
+        return view('locations.details_locations', [
+            'location' => $location,
+            'available' => $counts->get('available', 0),
+            'inUse' => $counts->get('in_use', 0),
+            'maintenance' => $counts->get('maintenance', 0),
         ]);
-
-        $location->update($data);
-
-        return redirect()->route('locations.index')->with('success', 'Location updated');
-    }
-
-    // Delete a location
-    public function destroy(Location $location)
-    {
-        $location->delete();
-
-        return redirect()->route('locations.index')->with('success', 'Location deleted');
     }
 }
