@@ -5,8 +5,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LockerController;
 use App\Http\Controllers\LockerUsageController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\LockerUsageController;
+
 
 Route::get('/', function () {
     return view('welcome');
