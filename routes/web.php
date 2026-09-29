@@ -56,21 +56,22 @@ Route::get('/users/dashboard', function () {
 
 
 
+// Route login and register dalin
+// Show login page 
+Route::get('/login', [AuthController::class, 'showLogin']) ->name('login'); 
+// Submit login 
+Route::post('/login', [AuthController::class, 'login']) ->name('login.store'); 
+// Logout 
+Route::post('/logout', [AuthController::class, 'logout']) ->name('logout');
 
-Route::get('/login', function () {
-    return view('login.index');
-})->name('login');
-
-// route user dalin
-Route::group(['prefix'=>'user','as' => 'users.'], function(){
-    // Login page
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    // Login store
-    Route::post('/login', [AuthController::class, 'login']);
-    // Logout
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-});
+// Staff register page 
+Route::get('/register/staff', [AuthController::class, 'showStaffRegister']) ->name('register.staff'); 
+// Store staff
+Route::post('/register/staff', [AuthController::class, 'staffRegister']) ->name('register.staff.store'); 
+// User register page 
+Route::get('/register/user', [AuthController::class, 'showUserRegister']) ->name('register.user'); 
+// Store user 
+Route::post('/register/user', [AuthController::class, 'userRegister']) ->name('register.user.store');
 
 Route::get('/staff/dashboard', function () {
     return view('staff.dashboard');

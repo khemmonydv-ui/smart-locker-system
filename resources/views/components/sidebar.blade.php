@@ -65,7 +65,7 @@
 
     <div class="sidebar-bottom">
 
-        <form method="POST" action="">
+        <form method="POST" action="{{route('logout')}}">
             @csrf
             <button type="submit" class="logout-button">
                 <i class="fa-solid fa-right-from-bracket"></i>
