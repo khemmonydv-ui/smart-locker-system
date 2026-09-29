@@ -6,33 +6,52 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-     Schema::create('maintenances', function (Blueprint $table) {
-        $table->id();
+        Schema::create('maintenances', function (Blueprint $table) {
+            $table->id();
 
-         $table->foreignId('user_id')
-          ->constrained('users')
-          ->cascadeOnDelete();
+            // The locker that has the problem.
+            // If the locker is deleted, its reports are deleted too.
+            $table->foreignId('locker_id')
+                ->constrained('lockers')
+                ->cascadeOnDelete();
 
-         $table->foreignId('locker_id')
-          ->constrained('lockers')
-          ->cascadeOnDelete();
+            // The user who REPORTED the problem.
+            // IMPORTANT: nullOnDelete keeps the report if the user is deleted,
+            // so the maintenance history is never lost. That is why it is nullable.
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
 
-        $table->date('assigned_at')->nullable;
-        $table->text('problem');
-        $table->string('status')->default('pending');
+            // The staff member who is FIXING it (shown in the "Assigned" column).
+            // Null = nobody assigned yet.
+            $table->foreignId('assigned_to')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
 
-        $table->timestamps();
-});
+            // What happened, written by the person reporting.
+            $table->text('problem');
+
+            // pending -> in_progress -> resolved
+            $table->string('status')->default('pending');
+
+            // Urgent reports show a warning icon and are sorted to the top.
+            $table->boolean('is_urgent')->default(false);
+
+            // When the problem was reported / when it was fixed.
+            $table->timestamp('reported_at')->useCurrent();
+            $table->timestamp('resolved_at')->nullable();
+
+            $table->timestamps();
+
+            // The page filters and sorts by these two columns, so an index keeps it fast.
+            $table->index(['status', 'is_urgent']);
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('maintenances');

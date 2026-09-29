@@ -92,7 +92,7 @@
                                     <td>{{ $report->assigned_to ?? '—' }}</td>
                                     <td>
                                         @if ($report->status !== 'resolved')
-                                            <form action="{{ route('maintenance.resolve', $report->id) }}" method="POST" style="display:inline;">
+                                            <form action="{{ route('staff.maintenance.resolve', $report->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" title="Mark resolved" style="background:none; border:none; cursor:pointer; color:#16a34a; font-size:16px;">
