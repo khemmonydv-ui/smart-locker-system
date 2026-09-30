@@ -16,6 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 // Admin pages: URLs start with /admin
 Route::prefix('admin')->group(function () {
     Route::resource('users', UserController::class);
@@ -76,6 +77,27 @@ Route::post('/settings/account', function () {
 Route::post('/settings/password', function () {
     return back()->with('success', 'Password changed. (not actually persisted yet)');
 })->name('settings.password');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
