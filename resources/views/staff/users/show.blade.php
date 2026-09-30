@@ -1,4 +1,4 @@
-<x-layout>
+<x-app-layout>
 
     <div class="p-6">
 
@@ -78,4 +78,4 @@
 
     </div>
 
-</x-layout>
+</x-app-layout>
