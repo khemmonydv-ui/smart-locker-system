@@ -9,32 +9,31 @@ use Illuminate\View\View;
 
 class LockerUsageController extends Controller
 {
-<<<<<<< HEAD
-    
-}
-=======
-    public function index()
+    public function show(): View|RedirectResponse
     {
-        // static demo data — swap this out once locker usage tracking is wired up
-        $activeSessions = collect([
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'active'],
-        ]);
+        $usage = LockerUsage::with(['locker.location'])
+            ->where('user_id', Auth::id())
+            ->whereNull('ended_at')
+            ->latest('started_at')
+            ->first();
 
-        $completedSessions = collect([
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'completed'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'completed'],
-            (object) ['locker' => 'A03', 'user' => 'Mony', 'location' => 'Phnom Penh', 'start_time' => '10:35 AM', 'duration' => '01:24', 'status' => 'completed'],
-        ]);
+        if (! $usage) {
+            return redirect()->route('locations.index')
+                ->with('status', 'You have no active locker right now.');
+        }
 
-        return view('staff.locker-usage', [
-            'activeSessions' => $activeSessions,
-            'completedSessions' => $completedSessions,
-            'title' => 'Locker Usage',
-        ]);
+        return view('lockers.show', ['usage' => $usage]);
+    }
+
+    public function unlock(LockerUsage $usage): RedirectResponse
+    {
+        return back()->with('status', 'Locker unlocked.');
+    }
+
+    public function release(LockerUsage $usage): RedirectResponse
+    {
+        $usage->update(['ended_at' => now()]);
+
+        return redirect()->route('locations.index')->with('status', 'Locker released.');
     }
 }
->>>>>>> 08fafb5 (not yet finish 50% by mony)
