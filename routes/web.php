@@ -1,40 +1,34 @@
 <?php
 
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\LocationLockerController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LockerController;
 use App\Http\Controllers\LockerUsageController;
+use App\Http\Controllers\UserLocationController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Staff's Dashboard Route Mony
 
-Route::get('/staff/dashboard', function () {
-    return view('Staff.dashboard');
-})->name('staff.dashboard');
+// Locations: list, details, lockers-at-a-location bora
+Route::prefix('users/locations')->name('locations.')->group(function () {
 
+    Route::get('/', [UserLocationController::class, 'index'])
+        ->name('index');
 
+    Route::get('/{location}', [UserLocationController::class, 'show'])
+        ->name('details_locations');
 
+    Route::get('/{location}/lockers', [UserLocationController::class, 'lockers'])
+        ->name('lockers');
 
-//bora //
+});
+// bora route user dashboard
 Route::get('/users/dashboard', function () {
     return view('users.dashboard');
-})->name('users.dashboard');
-
-Route::get('/users/locations', [LocationController::class, 'index'])->name('locations.index');
-Route::get('/locations/{location}', [LocationController::class, 'show'])->name('locations.details_locations');
-Route::get('/locations/{location}/lockers', [LocationLockerController::class, 'index'])->name('locations.lockers');
-
-Route::prefix('my-locker')->name('locker.')->group(function () {
-    Route::get('/', [LockerUsageController::class, 'show'])->name('show');
-    Route::post('/{usage}/unlock', [LockerUsageController::class, 'unlock'])->name('unlock');
-    Route::post('/{usage}/release', [LockerUsageController::class, 'release'])->name('release');
-});
+})->name('users.dashboard'); 
 
 
 
@@ -72,20 +66,20 @@ Route::prefix('my-locker')->name('locker.')->group(function () {
 
 
 // Route login and register dalin
-// Show login page
-Route::get('/login', [AuthController::class, 'showLogin']) ->name('login');
-// Submit login
-Route::post('/login', [AuthController::class, 'login']) ->name('login.store');
-// Logout
+// Show login page 
+Route::get('/login', [AuthController::class, 'showLogin']) ->name('login'); 
+// Submit login 
+Route::post('/login', [AuthController::class, 'login']) ->name('login.store'); 
+// Logout 
 Route::post('/logout', [AuthController::class, 'logout']) ->name('logout');
 
-// Staff register page
-Route::get('/register/staff', [AuthController::class, 'showStaffRegister']) ->name('register.staff');
+// Staff register page 
+Route::get('/register/staff', [AuthController::class, 'showStaffRegister']) ->name('register.staff'); 
 // Store staff
-Route::post('/register/staff', [AuthController::class, 'staffRegister']) ->name('register.staff.store');
-// User register page
-Route::get('/register/user', [AuthController::class, 'showUserRegister']) ->name('register.user');
-// Store user
+Route::post('/register/staff', [AuthController::class, 'staffRegister']) ->name('register.staff.store'); 
+// User register page 
+Route::get('/register/user', [AuthController::class, 'showUserRegister']) ->name('register.user'); 
+// Store user 
 Route::post('/register/user', [AuthController::class, 'userRegister']) ->name('register.user.store');
 
 Route::get('/staff/dashboard', function () {
