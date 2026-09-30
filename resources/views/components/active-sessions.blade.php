@@ -7,7 +7,7 @@
             Active Sessions ({{ count($sessions) }})
         </h2>
 
-        <a href="{{ route('locker-usage') }}"
+        <a href="{{ route('staff.locker-usage') }}"
             class="text-[var(--text-primary)] font-semibold text-[14px] hover:text-blue-500 hover:underline transition-colors duration-200">
             View All
         </a>

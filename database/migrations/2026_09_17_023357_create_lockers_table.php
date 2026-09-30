@@ -13,13 +13,8 @@ return new class extends Migration
     {
         Schema::create('lockers', function (Blueprint $table) {
             $table->id();
-<<<<<<< HEAD
             $table->foreignId('location_id')->constrained()->cascadeOnDelete();
             $table->string('name');
-=======
-            $table->String('name');
-            $table->ForeignId('location_id')->constrained()->onDelete('cascade');
->>>>>>> e97a97b (just only static)
             $table->string('status')->default('available');
             $table->string('size')->default('medium');
             $table->timestamps();
