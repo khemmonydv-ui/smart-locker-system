@@ -644,3 +644,6 @@ Route::prefix('staff')->name('staff.')->group(function () {
     // View one user
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
+
+    // Change Active / Inactive
+    Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
