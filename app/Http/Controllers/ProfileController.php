@@ -7,40 +7,49 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
+    // Show the logged-in user's profile
     public function index()
     {
-        $profile = Profile::firstOrCreate(
-            ['id' => 1],
-            [
-                'user_id' => 1,
-                'name'    => 'New User',
-                'email'   => '',
-            ]
-        );
+        // $profile = $this->currentProfile();
 
-        return view('.profile.index', compact('profile'));
+        return view('profile.index');
     }
 
+    // Show the edit form
     public function edit()
     {
-        $profile = Profile::findOrFail(1);
+        $profile = $this->currentProfile();
 
-        return view('Users.profile.edit', compact('profile'));
+        return view('profile.edit', compact('profile'));
     }
 
-    public function update(Request $request)
-    {
-        $profile = Profile::findOrFail(1);
+    // // Save changes
+    // public function update(Request $request)
+    // {
+    //     $profile = $this->currentProfile();
 
-        $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email|max:255',
-            'phone'   => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-        ]);
+    //     $validated = $request->validate([
+    //         'name'    => 'required|string|max:255',
+    //         'email'   => 'required|email|max:255',
+    //         'bio'     => 'nullable|string|max:1000',
+    //         'phone'   => 'nullable|string|max:20',
+    //         'address' => 'nullable|string|max:255',
+    //     ]);
 
-        $profile->update($validated);
+    //     $profile->update($validated);
 
-        return redirect()->route('profile.index')->with('success', 'Profile updated successfully.');
-    }
+    //     return redirect()->route('profile.index')->with('success', 'Profile updated successfully.');
+    // }
+
+    // // Get (or create) the profile row for whoever is logged in
+    // private function currentProfile(): Profile
+    // {
+    //     return Profile::firstOrCreate(
+    //         ['user_id' => auth()->id()],
+    //         [
+    //             'name'  => auth()->user()->name,
+    //             'email' => auth()->user()->email,
+    //         ]
+    //     );
+    // }
 }
