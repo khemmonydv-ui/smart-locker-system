@@ -7,7 +7,7 @@
             Maintenance Alerts({{ count($maintenances) }})
         </h2>
 
-        <a href="{{ route('maintenance') }}"
+        <a href=""
             class="text-[var(--text-primary)] font-semibold text-[14px] hover:text-blue-500 hover:underline transition-colors duration-200">
             View All
         </a>
