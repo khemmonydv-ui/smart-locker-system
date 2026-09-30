@@ -6,6 +6,10 @@ use App\Http\Controllers\LockerController;
 use App\Http\Controllers\LockerUsageController;
 use App\Http\Controllers\UserLocationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LockerDetailController;
+use App\Http\Controllers\YourLocker;
+use App\Http\Controllers\MaintenanceController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,6 +35,33 @@ Route::get('/users/dashboard', function () {
 })->name('users.dashboard'); 
 
 
+Route::get('/settings', function () {
+    return view('staff.settings', [
+        'title' => 'Settings',
+        'user'  => auth()->user(), // will be null if not logged in yet
+        'systemSettings' => [
+            'system_name' => 'SmartHub Locker System',
+            'field_two'   => '',
+            'field_three' => '',
+        ],
+    ]);
+})->name('settings.index');
+
+// TEMPORARY: these only need to exist so the page can render
+// (the form "action" URLs are built even before anything is submitted).
+// They don't save anything yet — replace with real controller methods later.
+
+Route::post('/settings/system', function () {
+    return back()->with('success', 'System settings saved. (not actually persisted yet)');
+})->name('settings.system');
+
+Route::post('/settings/account', function () {
+    return back()->with('success', 'Account details updated. (not actually persisted yet)');
+})->name('settings.account');
+
+Route::post('/settings/password', function () {
+    return back()->with('success', 'Password changed. (not actually persisted yet)');
+})->name('settings.password');
 
 
 
@@ -64,6 +95,373 @@ Route::get('/users/dashboard', function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::get('/staff/dashboard', function () {
+    return view('staff.dashboard');
+})->name('staff.dashboard');
+
+Route::get('/users/dashboard', function () {
+    return view('users.dashboard');
+})->name('users.dashboard');
 
 // Route login and register dalin
 // Show login page 
@@ -136,10 +534,14 @@ Route::group(['prefix' => 'lockers', 'as' => 'lockers.'], function () {
 
 });
 
+Route::post('/settings/account', function () {
+    return back()->with('success', 'Account details updated. (not actually persisted yet)');
+})->name('settings.account');
+ 
+Route::post('/settings/password', function () {
+    return back()->with('success', 'Password changed. (not actually persisted yet)');
+})->name('settings.password');
 
-Route::get('/locker-usage', function () {
-    return view('staff.locker-usage');
-})->name('locker-usage');
 
 Route::get('/maintenance', function () {
     return view('staff.maintenance');

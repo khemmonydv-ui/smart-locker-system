@@ -33,7 +33,7 @@
             <span>Lockers</span>
         </a>
 
-        <a href="{{ url('/users') }}"
+        <a href="{{ url('staff/user') }}"
            class="nav-item {{ request()->is('users*') ? 'active' : '' }}"
            @if(request()->is('users*')) aria-current="page" @endif>
             <i class="fa-solid fa-users"></i>

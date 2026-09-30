@@ -19,18 +19,18 @@
 <div class="main-wrapper">
 <!-- navbar -->
 <x-navbar
-:title="$title ?? 'Locker Usage'"
+:title="$title ?? 'User'"
 />
 
 <!-- page-content -->
 <main class="page-content">
 
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Locker Usage</h1>
 
-    <x-session-table heading="Active Sessions" :sessions="$activeSessions" />
-    <x-session-table heading="Completed Sessions" :sessions="$completedSessions" />
+
+    <x-user-table :users="$users" />
 
 </main>
+
 </div>
 </div>
 
