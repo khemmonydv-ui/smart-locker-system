@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\LockerUsage;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class LockerUsageController extends Controller
 {
-<<<<<<< HEAD
     public function show(): View|RedirectResponse
     {
         $usage = LockerUsage::with(['locker.location'])
@@ -35,9 +37,14 @@ class LockerUsageController extends Controller
 
         return redirect()->route('locations.index')->with('status', 'Locker released.');
     }
-}
-=======
-    public function index()
+
+    // Staff-facing table of locker sessions.
+    // NOTE: this queries a "status" column on locker_usages that doesn't
+    // exist in the current migration (which only has started_at/ended_at).
+    // Not wired to a route yet — add a migration for `status`, or rewrite
+    // the two queries below to use whereNull('ended_at') / whereNotNull('ended_at')
+    // instead, before enabling this.
+    public function index(): View
     {
         $activeSessions = LockerUsage::with(['user', 'locker'])
             ->where('status', 'active')
@@ -64,7 +71,6 @@ class LockerUsageController extends Controller
     {
         $user = $usage->user;
 
-        // active sessions are still running, so measure up to now
         $end     = $usage->ended_at ?? now();
         $minutes = $usage->started_at ? (int) abs($usage->started_at->diffInMinutes($end)) : 0;
 
@@ -78,4 +84,3 @@ class LockerUsageController extends Controller
         ];
     }
 }
->>>>>>> refs/remotes/origin/feature/users-dashboard
